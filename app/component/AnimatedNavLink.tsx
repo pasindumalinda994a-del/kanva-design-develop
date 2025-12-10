@@ -41,7 +41,7 @@ export default function AnimatedNavLink({
         },
         {
           y: "-100%",
-          opacity: 0,
+          opacity: 1,
           duration: 0.2,
           ease: "power2.inOut",
         }
@@ -52,7 +52,7 @@ export default function AnimatedNavLink({
         bottomText,
         {
           y: "100%",
-          opacity: 0,
+          opacity: 1,
         },
         {
           y: 0,
@@ -77,9 +77,9 @@ export default function AnimatedNavLink({
           opacity: 1,
         },
         {
-          y: "-100%",
-          opacity: 0,
-          duration: 0.4,
+          y: "100%",
+          opacity: 1,
+          duration: 0.2,
           ease: "power2.inOut",
         }
       );
@@ -88,13 +88,13 @@ export default function AnimatedNavLink({
       hoverTimeline.fromTo(
         topText,
         {
-          y: "100%",
-          opacity: 0,
+          y: "-100%",
+          opacity: 1,
         },
         {
           y: 0,
           opacity: 1,
-          duration: 0.4,
+          duration: 0.2,
           ease: "power2.inOut",
         },
         "<0.1" // Start slightly before bottom animation ends

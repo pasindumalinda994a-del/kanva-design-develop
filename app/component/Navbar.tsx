@@ -1,31 +1,234 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import gsap from "gsap";
 import AnimatedNavLink from "./AnimatedNavLink";
+import ShopDropdown from "./ShopDropdown";
+import CollectionDropdown from "./CollectionDropdown";
 
 export default function Navbar() {
+  const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
+  const [isCollectionsDropdownOpen, setIsCollectionsDropdownOpen] = useState(false);
+  const shopLinkRef = useRef<HTMLDivElement>(null);
+  const collectionsLinkRef = useRef<HTMLDivElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const collectionsHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const lastScrollY = useRef(0);
+  const scrollTween = useRef<gsap.core.Tween | null>(null);
+  const shopPlusRef = useRef<HTMLSpanElement>(null);
+  const collectionsPlusRef = useRef<HTMLSpanElement>(null);
+
+  const handleShopMouseEnter = () => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setIsShopDropdownOpen(true);
+  };
+
+  const handleShopMouseLeave = () => {
+    // Add a small delay before closing to allow moving to dropdown
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsShopDropdownOpen(false);
+    }, 100);
+  };
+
+  const handleDropdownMouseEnter = () => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setIsShopDropdownOpen(true);
+  };
+
+  const handleDropdownClose = () => {
+    setIsShopDropdownOpen(false);
+  };
+
+  const handleCollectionsMouseEnter = () => {
+    if (collectionsHoverTimeoutRef.current) clearTimeout(collectionsHoverTimeoutRef.current);
+    setIsCollectionsDropdownOpen(true);
+  };
+
+  const handleCollectionsMouseLeave = () => {
+    // Add a small delay before closing to allow moving to dropdown
+    collectionsHoverTimeoutRef.current = setTimeout(() => {
+      setIsCollectionsDropdownOpen(false);
+    }, 100);
+  };
+
+  const handleCollectionsDropdownMouseEnter = () => {
+    if (collectionsHoverTimeoutRef.current) clearTimeout(collectionsHoverTimeoutRef.current);
+    setIsCollectionsDropdownOpen(true);
+  };
+
+  const handleCollectionsDropdownClose = () => {
+    setIsCollectionsDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDirection = currentScrollY > lastScrollY.current ? "down" : "up";
+      
+      // Kill any existing animation
+      if (scrollTween.current) {
+        scrollTween.current.kill();
+      }
+
+      // If at the top of the page, always show navbar
+      if (currentScrollY <= 0) {
+        scrollTween.current = gsap.to(nav, {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      } else if (scrollDirection === "down") {
+        // Scroll down: hide navbar (move up and fade out)
+        scrollTween.current = gsap.to(nav, {
+          y: -200,
+          opacity: 0,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      } else {
+        // Scroll up: show navbar (return to position and fade in)
+        scrollTween.current = gsap.to(nav, {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        });
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    // Throttle scroll events for better performance
+    let ticking = false;
+    const throttledHandleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", throttledHandleScroll);
+      if (scrollTween.current) {
+        scrollTween.current.kill();
+      }
+    };
+  }, []);
+
+  // Animate plus icons on hover
+  useEffect(() => {
+    const shopPlus = shopPlusRef.current;
+    const collectionsPlus = collectionsPlusRef.current;
+    const shopLinkContainer = shopLinkRef.current;
+    const collectionsLinkContainer = collectionsLinkRef.current;
+
+    if (!shopPlus || !collectionsPlus || !shopLinkContainer || !collectionsLinkContainer) return;
+
+    let shopTween: gsap.core.Tween | null = null;
+    let collectionsTween: gsap.core.Tween | null = null;
+
+    const handleShopPlusMouseEnter = () => {
+      if (shopTween) shopTween.kill();
+      shopTween = gsap.to(shopPlus, {
+        rotation: 135,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    };
+
+    const handleShopPlusMouseLeave = () => {
+      if (shopTween) shopTween.kill();
+      shopTween = gsap.to(shopPlus, {
+        rotation: 0,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    };
+
+    const handleCollectionsPlusMouseEnter = () => {
+      if (collectionsTween) collectionsTween.kill();
+      collectionsTween = gsap.to(collectionsPlus, {
+        rotation: 135,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    };
+
+    const handleCollectionsPlusMouseLeave = () => {
+      if (collectionsTween) collectionsTween.kill();
+      collectionsTween = gsap.to(collectionsPlus, {
+        rotation: 0,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    };
+
+    // Attach hover to parent containers for better UX
+    shopLinkContainer.addEventListener("mouseenter", handleShopPlusMouseEnter);
+    shopLinkContainer.addEventListener("mouseleave", handleShopPlusMouseLeave);
+    collectionsLinkContainer.addEventListener("mouseenter", handleCollectionsPlusMouseEnter);
+    collectionsLinkContainer.addEventListener("mouseleave", handleCollectionsPlusMouseLeave);
+
+    return () => {
+      shopLinkContainer.removeEventListener("mouseenter", handleShopPlusMouseEnter);
+      shopLinkContainer.removeEventListener("mouseleave", handleShopPlusMouseLeave);
+      collectionsLinkContainer.removeEventListener("mouseenter", handleCollectionsPlusMouseEnter);
+      collectionsLinkContainer.removeEventListener("mouseleave", handleCollectionsPlusMouseLeave);
+      if (shopTween) shopTween.kill();
+      if (collectionsTween) collectionsTween.kill();
+    };
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center px-6 pt-8 pb-6">
-      <div className="w-full max-w-8xl mx-8 bg-white rounded-xl shadow-sm">
-        <div className="flex items-center justify-between px-8 py-6">
-          {/* Left Navigation Links */}
-          <div className="flex items-center gap-8">
-            <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
-              Shop +
-            </AnimatedNavLink>
-            <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
-              Collections +
-            </AnimatedNavLink>
-            <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
-              About
-            </AnimatedNavLink>
-            <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
-              Blog
-            </AnimatedNavLink>
-            <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
-              Contact
-            </AnimatedNavLink>
-          </div>
+    <>
+      <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center px-6 pt-8 pb-6">
+        <div className="w-full max-w-8xl mx-8 bg-white rounded-xl shadow-sm">
+          <div className="flex items-center justify-between px-8 py-6">
+            {/* Left Navigation Links */}
+            <div className="flex items-center gap-8">
+              <div
+                ref={shopLinkRef}
+                onMouseEnter={handleShopMouseEnter}
+                onMouseLeave={handleShopMouseLeave}
+                className="relative flex items-center gap-1"
+              >
+                <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
+                  Shop
+                </AnimatedNavLink>
+                <span ref={shopPlusRef} className="inline-block text-black text-gray-800 font-normal text-lg">+</span>
+              </div>
+              <div
+                ref={collectionsLinkRef}
+                onMouseEnter={handleCollectionsMouseEnter}
+                onMouseLeave={handleCollectionsMouseLeave}
+                className="relative flex items-center gap-1"
+              >
+                <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
+                  Collections
+                </AnimatedNavLink>
+                <span ref={collectionsPlusRef} className="inline-block text-black text-gray-800 font-normal text-lg">+</span>
+              </div>
+              <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
+                About
+              </AnimatedNavLink>
+              <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
+                Blog
+              </AnimatedNavLink>
+              <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
+                Contact
+              </AnimatedNavLink>
+            </div>
 
           {/* Center Logo */}
           <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -129,5 +332,12 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+    <div onMouseEnter={handleDropdownMouseEnter} onMouseLeave={handleShopMouseLeave}>
+      <ShopDropdown isOpen={isShopDropdownOpen} onClose={handleDropdownClose} shopLinkRef={shopLinkRef} />
+    </div>
+    <div onMouseEnter={handleCollectionsDropdownMouseEnter} onMouseLeave={handleCollectionsMouseLeave}>
+      <CollectionDropdown isOpen={isCollectionsDropdownOpen} onClose={handleCollectionsDropdownClose} collectionsLinkRef={collectionsLinkRef} />
+    </div>
+    </>
   );
 }
