@@ -42,7 +42,7 @@ export default function ProductCard({
 
   return (
     <div
-      className="bg-[#E8E8E1] rounded-xl p-4 relative"
+      className="bg-[#E8E8E1] rounded-xl p-4 relative aspect-[3/4] flex flex-col"
       onClick={handleCardClick}
     >
       {/* Heart Icon (Favorite) */}
@@ -75,7 +75,7 @@ export default function ProductCard({
       )}
 
       {/* Product Image */}
-      <div className="relative w-full h-56 mb-3 flex items-center justify-center">
+      <div className="relative w-full flex-1 mb-3 flex items-center justify-center min-h-0">
         {product.image ? (
           <div className="relative w-full h-full">
             <Image

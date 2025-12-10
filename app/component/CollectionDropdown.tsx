@@ -14,19 +14,19 @@ const collections: CollectionCard[] = [
   {
     id: 1,
     name: "Cleansers",
-    image: "/images/collection-cleansers.webp",
+    image: "/images/clensers.webp",
     href: "#",
   },
   {
     id: 2,
     name: "Lotions",
-    image: "/images/collection-lotions.webp",
+    image: "/images/lotions.webp",
     href: "#",
   },
   {
     id: 3,
     name: "Moisturizers",
-    image: "/images/collection-moisturizers.webp",
+    image: "/images/moisturizers.webp",
     href: "#",
   },
 ];

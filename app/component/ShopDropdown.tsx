@@ -13,19 +13,18 @@ interface ShopDropdownProps {
 const products: Product[] = [
   {
     id: 1,
-    name: "Gentle Wash",
+    name: "Glow Milk",
     price: "$10.00",
     discount: "57% OFF",
-    image: "/images/product-gentle-wash.webp",
+    image: "/images/products/glow-milk1.png",
   },
   {
     id: 2,
     name: "Hydra Drops",
     price: "$11.00",
     discount: "54% OFF",
-    image: "/images/product-hydra-drops.webp",
+    image: "/images/products/hydra-drops1.png",
   },
-  
 ];
 
 const menuItems = [

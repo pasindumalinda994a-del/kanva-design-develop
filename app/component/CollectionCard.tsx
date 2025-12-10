@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
+import Image from "next/image";
 
 export interface CollectionCard {
   id: number;
@@ -93,69 +94,23 @@ export default function CollectionCardItem({ collection, onClick }: CollectionCa
     <a
       ref={cardRef}
       href={collection.href}
-      className="group relative bg-white rounded-2xl overflow-hidden cursor-pointer block"
+      className="group relative bg-[#E8E8E1] rounded-2xl overflow-hidden cursor-pointer block aspect-[4/3] flex flex-col"
       onClick={onClick}
     >
       {/* Image Container */}
       <div
         ref={imageRef}
-        className="relative w-full h-56 bg-[#F5F5F0] overflow-hidden"
+        className="relative w-full flex-1 bg-[#F5F5F0] overflow-hidden min-h-0"
       >
-        {/* Placeholder for collection image - you can replace with actual images */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-full h-full flex items-center justify-center">
-            {/* Placeholder content - styled bottles similar to image description */}
-            {collection.id === 1 && (
-              // Cleansers - dark olive green bottles
-              <div className="relative w-full h-full flex items-center justify-center gap-6">
-                <div className="relative w-16 h-28">
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#2D5F3F] via-[#1A5F3F] to-[#2D5F3F] rounded-t-full rounded-b-lg shadow-lg">
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2.5 bg-black rounded-t-full"></div>
-                  </div>
-                </div>
-                <div className="relative w-20 h-36">
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#2D5F3F] via-[#1A5F3F] to-[#2D5F3F] rounded-t-full rounded-b-lg shadow-lg">
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2.5 bg-black rounded-t-full"></div>
-                  </div>
-                </div>
-              </div>
-            )}
-            {collection.id === 2 && (
-              // Lotions - dark grey/smoky translucent bottles
-              <div className="relative w-full h-full flex items-center justify-center gap-6">
-                <div className="relative w-20 h-36">
-                  <div className="absolute inset-0 bg-gradient-to-b from-gray-700/80 via-gray-600/80 to-gray-700/80 rounded-t-full rounded-b-lg shadow-lg backdrop-blur-sm">
-                    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-14 h-16 bg-[#F5F5F0] rounded-sm"></div>
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2.5 bg-black rounded-t-full"></div>
-                  </div>
-                </div>
-                <div className="relative w-16 h-28">
-                  <div className="absolute inset-0 bg-gradient-to-b from-gray-700/80 via-gray-600/80 to-gray-700/80 rounded-t-full rounded-b-lg shadow-lg backdrop-blur-sm">
-                    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-12 h-14 bg-[#F5F5F0] rounded-sm"></div>
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2.5 bg-black rounded-t-full"></div>
-                  </div>
-                </div>
-              </div>
-            )}
-            {collection.id === 3 && (
-              // Moisturizers - amber glass bottles
-              <div className="relative w-full h-full flex items-center justify-center gap-6">
-                <div className="relative w-20 h-36">
-                  <div className="absolute inset-0 bg-gradient-to-b from-amber-900/60 via-amber-800/60 to-amber-900/60 rounded-t-full rounded-b-lg shadow-lg">
-                    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-14 h-16 bg-[#F5F5F0] rounded-sm"></div>
-                    <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-3 bg-gray-800 rounded-t-sm"></div>
-                  </div>
-                </div>
-                <div className="relative w-16 h-28">
-                  <div className="absolute inset-0 bg-gradient-to-b from-amber-900/60 via-amber-800/60 to-amber-900/60 rounded-t-full rounded-b-lg shadow-lg">
-                    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-12 h-14 bg-[#F5F5F0] rounded-sm"></div>
-                    <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-4 h-2.5 bg-gray-800 rounded-t-sm"></div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        {collection.image && (
+          <Image
+            src={collection.image}
+            alt={collection.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        )}
       </div>
 
       {/* Text with Arrow */}
