@@ -10,55 +10,103 @@ import CollectionDropdown from "./CollectionDropdown";
 export default function Navbar() {
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isCollectionsDropdownOpen, setIsCollectionsDropdownOpen] = useState(false);
+  const [isShopClicked, setIsShopClicked] = useState(false);
+  const [isCollectionsClicked, setIsCollectionsClicked] = useState(false);
   const shopLinkRef = useRef<HTMLDivElement>(null);
   const collectionsLinkRef = useRef<HTMLDivElement>(null);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const collectionsHoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
   const scrollTween = useRef<gsap.core.Tween | null>(null);
   const shopPlusRef = useRef<HTMLSpanElement>(null);
   const collectionsPlusRef = useRef<HTMLSpanElement>(null);
 
+  // Shop hover handlers (only work when not clicked)
   const handleShopMouseEnter = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    setIsShopDropdownOpen(true);
+    if (!isShopClicked) {
+      setIsShopDropdownOpen(true);
+    }
   };
 
   const handleShopMouseLeave = () => {
-    // Add a small delay before closing to allow moving to dropdown
-    hoverTimeoutRef.current = setTimeout(() => {
+    if (!isShopClicked) {
       setIsShopDropdownOpen(false);
-    }, 100);
+    }
   };
 
-  const handleDropdownMouseEnter = () => {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    setIsShopDropdownOpen(true);
+  const handleShopDropdownMouseEnter = () => {
+    if (!isShopClicked) {
+      setIsShopDropdownOpen(true);
+    }
   };
 
-  const handleDropdownClose = () => {
-    setIsShopDropdownOpen(false);
+  const handleShopDropdownMouseLeave = () => {
+    if (!isShopClicked) {
+      setIsShopDropdownOpen(false);
+    }
   };
 
+  // Shop click handler
+  const handleShopClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isShopClicked) {
+      setIsShopClicked(false);
+      setIsShopDropdownOpen(false);
+    } else {
+      // Close collections if open
+      setIsCollectionsClicked(false);
+      setIsCollectionsDropdownOpen(false);
+      // Open shop
+      setIsShopClicked(true);
+      setIsShopDropdownOpen(true);
+    }
+  };
+
+  // Collections hover handlers (only work when not clicked)
   const handleCollectionsMouseEnter = () => {
-    if (collectionsHoverTimeoutRef.current) clearTimeout(collectionsHoverTimeoutRef.current);
-    setIsCollectionsDropdownOpen(true);
+    if (!isCollectionsClicked) {
+      setIsCollectionsDropdownOpen(true);
+    }
   };
 
   const handleCollectionsMouseLeave = () => {
-    // Add a small delay before closing to allow moving to dropdown
-    collectionsHoverTimeoutRef.current = setTimeout(() => {
+    if (!isCollectionsClicked) {
       setIsCollectionsDropdownOpen(false);
-    }, 100);
+    }
   };
 
   const handleCollectionsDropdownMouseEnter = () => {
-    if (collectionsHoverTimeoutRef.current) clearTimeout(collectionsHoverTimeoutRef.current);
-    setIsCollectionsDropdownOpen(true);
+    if (!isCollectionsClicked) {
+      setIsCollectionsDropdownOpen(true);
+    }
   };
 
-  const handleCollectionsDropdownClose = () => {
+  const handleCollectionsDropdownMouseLeave = () => {
+    if (!isCollectionsClicked) {
+      setIsCollectionsDropdownOpen(false);
+    }
+  };
+
+  // Collections click handler
+  const handleCollectionsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isCollectionsClicked) {
+      setIsCollectionsClicked(false);
+      setIsCollectionsDropdownOpen(false);
+    } else {
+      // Close shop if open
+      setIsShopClicked(false);
+      setIsShopDropdownOpen(false);
+      // Open collections
+      setIsCollectionsClicked(true);
+      setIsCollectionsDropdownOpen(true);
+    }
+  };
+
+  // Close dropdowns when clicking anywhere (backdrop)
+  const handleBackdropClick = () => {
+    setIsShopClicked(false);
+    setIsShopDropdownOpen(false);
+    setIsCollectionsClicked(false);
     setIsCollectionsDropdownOpen(false);
   };
 
@@ -126,7 +174,38 @@ export default function Navbar() {
     };
   }, []);
 
-  // Animate plus icons on hover
+
+  // Animate plus icons on click state
+  useEffect(() => {
+    const shopPlus = shopPlusRef.current;
+    const collectionsPlus = collectionsPlusRef.current;
+
+    if (!shopPlus || !collectionsPlus) return;
+
+    let shopTween: gsap.core.Tween | null = null;
+    let collectionsTween: gsap.core.Tween | null = null;
+
+    // Animate shop plus based on click state
+    shopTween = gsap.to(shopPlus, {
+      rotation: isShopClicked ? 135 : 0,
+      duration: 0.4,
+      ease: "power2.out",
+    });
+
+    // Animate collections plus based on click state
+    collectionsTween = gsap.to(collectionsPlus, {
+      rotation: isCollectionsClicked ? 135 : 0,
+      duration: 0.4,
+      ease: "power2.out",
+    });
+
+    return () => {
+      if (shopTween) shopTween.kill();
+      if (collectionsTween) collectionsTween.kill();
+    };
+  }, [isShopClicked, isCollectionsClicked]);
+
+  // Animate plus icons on hover (only when not clicked)
   useEffect(() => {
     const shopPlus = shopPlusRef.current;
     const collectionsPlus = collectionsPlusRef.current;
@@ -139,6 +218,7 @@ export default function Navbar() {
     let collectionsTween: gsap.core.Tween | null = null;
 
     const handleShopPlusMouseEnter = () => {
+      if (isShopClicked) return; // Don't animate on hover if clicked
       if (shopTween) shopTween.kill();
       shopTween = gsap.to(shopPlus, {
         rotation: 135,
@@ -148,6 +228,7 @@ export default function Navbar() {
     };
 
     const handleShopPlusMouseLeave = () => {
+      if (isShopClicked) return; // Don't animate on hover if clicked
       if (shopTween) shopTween.kill();
       shopTween = gsap.to(shopPlus, {
         rotation: 0,
@@ -157,6 +238,7 @@ export default function Navbar() {
     };
 
     const handleCollectionsPlusMouseEnter = () => {
+      if (isCollectionsClicked) return; // Don't animate on hover if clicked
       if (collectionsTween) collectionsTween.kill();
       collectionsTween = gsap.to(collectionsPlus, {
         rotation: 135,
@@ -166,6 +248,7 @@ export default function Navbar() {
     };
 
     const handleCollectionsPlusMouseLeave = () => {
+      if (isCollectionsClicked) return; // Don't animate on hover if clicked
       if (collectionsTween) collectionsTween.kill();
       collectionsTween = gsap.to(collectionsPlus, {
         rotation: 0,
@@ -174,7 +257,6 @@ export default function Navbar() {
       });
     };
 
-    // Attach hover to parent containers for better UX
     shopLinkContainer.addEventListener("mouseenter", handleShopPlusMouseEnter);
     shopLinkContainer.addEventListener("mouseleave", handleShopPlusMouseLeave);
     collectionsLinkContainer.addEventListener("mouseenter", handleCollectionsPlusMouseEnter);
@@ -188,7 +270,7 @@ export default function Navbar() {
       if (shopTween) shopTween.kill();
       if (collectionsTween) collectionsTween.kill();
     };
-  }, []);
+  }, [isShopClicked, isCollectionsClicked]);
 
   return (
     <>
@@ -199,25 +281,43 @@ export default function Navbar() {
             <div className="flex items-center gap-8">
               <div
                 ref={shopLinkRef}
-                onMouseEnter={handleShopMouseEnter}
-                onMouseLeave={handleShopMouseLeave}
                 className="relative flex items-center gap-1"
               >
-                <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
-                  Shop
-                </AnimatedNavLink>
-                <span ref={shopPlusRef} className="inline-block text-black text-gray-800 font-normal text-lg">+</span>
+                <div
+                  onMouseEnter={handleShopMouseEnter}
+                  onMouseLeave={handleShopMouseLeave}
+                  onClick={handleShopClick}
+                  className="flex items-center gap-1 cursor-pointer"
+                >
+                  <AnimatedNavLink 
+                    href="#" 
+                    className="text-black text-gray-800 font-normal"
+                    isActive={isShopClicked}
+                  >
+                    Shop
+                  </AnimatedNavLink>
+                  <span ref={shopPlusRef} className="inline-block text-black text-gray-800 font-normal text-lg">+</span>
+                </div>
               </div>
               <div
                 ref={collectionsLinkRef}
-                onMouseEnter={handleCollectionsMouseEnter}
-                onMouseLeave={handleCollectionsMouseLeave}
                 className="relative flex items-center gap-1"
               >
-                <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
-                  Collections
-                </AnimatedNavLink>
-                <span ref={collectionsPlusRef} className="inline-block text-black text-gray-800 font-normal text-lg">+</span>
+                <div
+                  onMouseEnter={handleCollectionsMouseEnter}
+                  onMouseLeave={handleCollectionsMouseLeave}
+                  onClick={handleCollectionsClick}
+                  className="flex items-center gap-1 cursor-pointer"
+                >
+                  <AnimatedNavLink 
+                    href="#" 
+                    className="text-black text-gray-800 font-normal"
+                    isActive={isCollectionsClicked}
+                  >
+                    Collections
+                  </AnimatedNavLink>
+                  <span ref={collectionsPlusRef} className="inline-block text-black text-gray-800 font-normal text-lg">+</span>
+                </div>
               </div>
               <AnimatedNavLink href="#" className="text-black text-gray-800 font-normal">
                 About
@@ -332,11 +432,27 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-    <div onMouseEnter={handleDropdownMouseEnter} onMouseLeave={handleShopMouseLeave}>
-      <ShopDropdown isOpen={isShopDropdownOpen} onClose={handleDropdownClose} shopLinkRef={shopLinkRef} />
+    <div 
+      onMouseEnter={handleShopDropdownMouseEnter} 
+      onMouseLeave={handleShopDropdownMouseLeave}
+      style={{ pointerEvents: isShopDropdownOpen ? "auto" : "none" }}
+    >
+      <ShopDropdown 
+        isOpen={isShopDropdownOpen} 
+        onClose={handleBackdropClick} 
+        shopLinkRef={shopLinkRef} 
+      />
     </div>
-    <div onMouseEnter={handleCollectionsDropdownMouseEnter} onMouseLeave={handleCollectionsMouseLeave}>
-      <CollectionDropdown isOpen={isCollectionsDropdownOpen} onClose={handleCollectionsDropdownClose} collectionsLinkRef={collectionsLinkRef} />
+    <div 
+      onMouseEnter={handleCollectionsDropdownMouseEnter} 
+      onMouseLeave={handleCollectionsDropdownMouseLeave}
+      style={{ pointerEvents: isCollectionsDropdownOpen ? "auto" : "none" }}
+    >
+      <CollectionDropdown 
+        isOpen={isCollectionsDropdownOpen} 
+        onClose={handleBackdropClick} 
+        collectionsLinkRef={collectionsLinkRef} 
+      />
     </div>
     </>
   );

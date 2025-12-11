@@ -183,7 +183,7 @@ export default function FeatureCards() {
             >
               <div className="text-black mb-4">{feature.icon}</div>
               <h3
-                className="text-xl md:text-2xl text-black mb-3"
+                className="text-lg md:text-xl text-black mb-3"
                 style={{ fontFamily: "var(--font-sentient)", fontWeight: 400 }}
               >
                 {feature.title}

@@ -110,7 +110,7 @@ export default function CollectionCardItem({ collection, onClick }: CollectionCa
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-        )}
+            )}
       </div>
 
       {/* Text with Arrow */}
@@ -119,7 +119,7 @@ export default function CollectionCardItem({ collection, onClick }: CollectionCa
         className="px-3 py-2.5 flex items-center justify-between border-t border-gray-100"
       >
         <span
-          className="text-black text-base font-normal"
+          className="text-black text-base font-light"
           style={{ fontFamily: "var(--font-sentient)" }}
         >
           {collection.name}

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
+import gsap from "gsap";
 
 export interface Product {
   id: number;
@@ -9,6 +10,7 @@ export interface Product {
   price: string;
   discount?: string;
   image?: string;
+  hoverImage?: string;
 }
 
 interface ProductCardProps {
@@ -25,6 +27,9 @@ export default function ProductCard({
   isFavorite = false,
 }: ProductCardProps) {
   const [favorited, setFavorited] = useState(isFavorite);
+  const mainImageRef = useRef<HTMLDivElement>(null);
+  const hoverImageRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -40,14 +45,51 @@ export default function ProductCard({
     }
   };
 
+  const handleMouseEnter = () => {
+    if (product.hoverImage && mainImageRef.current && hoverImageRef.current) {
+      // Fade out main image
+      gsap.to(mainImageRef.current, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
+      // Fade in hover image
+      gsap.to(hoverImageRef.current, {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (product.hoverImage && mainImageRef.current && hoverImageRef.current) {
+      // Fade in main image
+      gsap.to(mainImageRef.current, {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
+      // Fade out hover image
+      gsap.to(hoverImageRef.current, {
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
+    }
+  };
+
   return (
     <div
-      className="bg-[#E8E8E1] rounded-xl p-4 relative aspect-[3/4] flex flex-col"
+      ref={cardRef}
+      className="bg-[#E8E8E1] rounded-xl relative aspect-[3/4] flex flex-col overflow-hidden"
       onClick={handleCardClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Heart Icon (Favorite) */}
       <button
-        className="absolute top-3 left-3 w-8 h-8 flex items-center justify-center bg-white/80 rounded-full hover:bg-white transition-colors z-10 shadow-sm border border-gray-200"
+        className="absolute top-2 left-2 w-8 h-8 flex items-center justify-center rounded-full bg-white/75 transition-colors z-10 shadow-sm "
         aria-label="Add to favorites"
         onClick={handleFavoriteClick}
       >
@@ -57,7 +99,7 @@ export default function ProductCard({
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className={`w-4 h-4 ${favorited ? "text-red-500" : "text-gray-600"}`}
+          className={`w-4 h-4 ${favorited ? "text-[#757D5C]" : "text-[#757D5C]"}`}
         >
           <path
             strokeLinecap="round"
@@ -69,27 +111,50 @@ export default function ProductCard({
 
       {/* Discount Badge */}
       {product.discount && (
-        <div className="absolute top-3 right-3 bg-[#1A5F3F] text-white px-2 py-1 rounded-md text-xs font-semibold z-10 shadow-sm">
+        <div className="absolute top-2 right-2 bg-[#1A5F3F] text-white px-2 py-1 rounded-md text-xs font-semibold z-10 shadow-sm">
           {product.discount}
         </div>
       )}
 
-      {/* Product Image */}
-      <div className="relative w-full flex-1 mb-3 flex items-center justify-center min-h-0">
+      {/* Image Section - 3/4 of card */}
+      <div className="relative w-full h-3/4 overflow-hidden">
         {product.image ? (
           <div className="relative w-full h-full">
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+            {/* Main Image */}
+            <div 
+              ref={mainImageRef} 
+              className="absolute inset-0"
+              style={{ transform: "scale(1.0)", transformOrigin: "top center" }}
+            >
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                className="object-contain object-top"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            </div>
+            {/* Hover Image */}
+            {product.hoverImage && (
+              <div
+                ref={hoverImageRef}
+                className="absolute inset-0 opacity-0"
+                style={{ transform: "scale(1.0)", transformOrigin: "top center" }}
+              >
+                <Image
+                  src={product.hoverImage}
+                  alt={`${product.name} hover`}
+                  fill
+                  className="object-contain object-top"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </div>
+            )}
           </div>
         ) : (
-          <div className="relative w-28 h-44 flex items-center justify-center">
+          <div className="relative w-full h-full flex items-center justify-center">
             {/* Product Bottle Placeholder */}
-            <div className="relative w-full h-full">
+            <div className="relative w-28 h-44">
               {/* Bottle shape */}
               <div className="absolute inset-0 bg-gradient-to-b from-[#2D5F3F] via-[#1A5F3F] to-[#2D5F3F] rounded-t-full rounded-b-lg shadow-inner">
                 {/* Bottle label area */}
@@ -105,21 +170,21 @@ export default function ProductCard({
         )}
       </div>
 
-      {/* Product Name */}
-      <h3
-        className="text-black font-medium mb-1.5 text-sm"
-        style={{ fontFamily: "var(--font-sentient)" }}
-      >
-        {product.name}
-      </h3>
-
-      {/* Product Price */}
-      <p
-        className="text-black text-sm font-normal"
-        style={{ fontFamily: "var(--font-sentient)" }}
-      >
-        {product.price}
-      </p>
+      {/* Text Section - 1/4 of card */}
+      <div className="h-1/4 flex flex-col items-center justify-center px-6 py-4">
+        <h3
+          className="text-black font-light text-center mb-2 text-base"
+          style={{ fontFamily: "var(--font-sentient)" }}
+        >
+          {product.name}
+        </h3>
+        <p
+          className="text-black text-sm font-light text-center"
+          style={{ fontFamily: "var(--font-sentient)" }}
+        >
+          {product.price}
+        </p>
+      </div>
     </div>
   );
 }

@@ -7,17 +7,87 @@ interface AnimatedNavLinkProps {
   href: string;
   children: React.ReactNode;
   className?: string;
+  isActive?: boolean;
 }
 
 export default function AnimatedNavLink({
   href,
   children,
   className = "",
+  isActive = false,
 }: AnimatedNavLinkProps) {
   const containerRef = useRef<HTMLAnchorElement>(null);
   const topTextRef = useRef<HTMLSpanElement>(null);
   const bottomTextRef = useRef<HTMLSpanElement>(null);
+  const isInitialMount = useRef(true);
 
+  // Set initial state and animate on active state change (click)
+  useEffect(() => {
+    const topText = topTextRef.current;
+    const bottomText = bottomTextRef.current;
+
+    if (!topText || !bottomText) return;
+
+    // Set initial state without animation on first mount
+    if (isInitialMount.current) {
+      if (isActive) {
+        gsap.set(topText, { y: "-100%", opacity: 1 });
+        gsap.set(bottomText, { y: 0, opacity: 1 });
+      } else {
+        gsap.set(topText, { y: 0, opacity: 1 });
+        gsap.set(bottomText, { y: "-100%", opacity: 1 });
+      }
+      isInitialMount.current = false;
+      return;
+    }
+
+    // Animate on subsequent changes
+    const timeline = gsap.timeline();
+
+    if (isActive) {
+      // Clicked: show bottom text
+      timeline.to(topText, {
+        y: "-100%",
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.inOut",
+      });
+      timeline.to(
+        bottomText,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.2,
+          ease: "power2.inOut",
+        },
+        "<0.1"
+      );
+    } else {
+      // Not clicked: show top text
+      timeline.to(bottomText, {
+        y: "100%",
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.inOut",
+      });
+      timeline.to(
+        topText,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.2,
+          ease: "power2.inOut",
+        },
+        "<0.1"
+      );
+    }
+
+    return () => {
+      timeline.kill();
+    };
+  }, [isActive]);
+
+  // Hover animations (only when not active)
   useEffect(() => {
     const container = containerRef.current;
     const topText = topTextRef.current;
@@ -28,76 +98,52 @@ export default function AnimatedNavLink({
     let hoverTimeline: gsap.core.Timeline | null = null;
 
     const handleMouseEnter = () => {
+      if (isActive) return; // Don't animate on hover if clicked
       if (hoverTimeline) hoverTimeline.kill();
 
       hoverTimeline = gsap.timeline();
 
-      // Animate top text down and out
-      hoverTimeline.fromTo(
-        topText,
-        {
-          y: 0,
-          opacity: 1,
-        },
-        {
-          y: "-100%",
-          opacity: 1,
-          duration: 0.2,
-          ease: "power2.inOut",
-        }
-      );
+      hoverTimeline.to(topText, {
+        y: "-100%",
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.inOut",
+      });
 
-      // Animate bottom text up and in (starting from below)
-      hoverTimeline.fromTo(
+      hoverTimeline.to(
         bottomText,
         {
-          y: "100%",
-          opacity: 1,
-        },
-        {
           y: 0,
           opacity: 1,
           duration: 0.2,
           ease: "power2.inOut",
         },
-        "<0.1" // Start slightly before top animation ends
+        "<0.1"
       );
     };
 
     const handleMouseLeave = () => {
+      if (isActive) return; // Don't animate on hover if clicked
       if (hoverTimeline) hoverTimeline.kill();
 
       hoverTimeline = gsap.timeline();
 
-      // Animate bottom text down and out
-      hoverTimeline.fromTo(
-        bottomText,
-        {
-          y: 0,
-          opacity: 1,
-        },
-        {
-          y: "100%",
-          opacity: 1,
-          duration: 0.2,
-          ease: "power2.inOut",
-        }
-      );
+      hoverTimeline.to(bottomText, {
+        y: "100%",
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.inOut",
+      });
 
-      // Animate top text up and in (starting from above)
-      hoverTimeline.fromTo(
+      hoverTimeline.to(
         topText,
         {
-          y: "-100%",
-          opacity: 1,
-        },
-        {
           y: 0,
           opacity: 1,
           duration: 0.2,
           ease: "power2.inOut",
         },
-        "<0.1" // Start slightly before bottom animation ends
+        "<0.1"
       );
     };
 
@@ -109,7 +155,8 @@ export default function AnimatedNavLink({
       container.removeEventListener("mouseleave", handleMouseLeave);
       if (hoverTimeline) hoverTimeline.kill();
     };
-  }, []);
+  }, [isActive]);
+
 
   return (
     <a
@@ -128,7 +175,6 @@ export default function AnimatedNavLink({
         <span
           ref={bottomTextRef}
           className="block absolute top-0 left-0 w-full"
-          style={{ opacity: 0, transform: "translateY(-100%)" }}
         >
           {children}
         </span>

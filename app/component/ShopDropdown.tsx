@@ -17,6 +17,7 @@ const products: Product[] = [
     price: "$10.00",
     discount: "57% OFF",
     image: "/images/products/glow-milk1.png",
+    hoverImage: "/images/products/glow-milk2.jpg",
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ const products: Product[] = [
     price: "$11.00",
     discount: "54% OFF",
     image: "/images/products/hydra-drops1.png",
+    hoverImage: "/images/products/hydra-drops2.jpg",
   },
 ];
 
@@ -238,7 +240,7 @@ export default function ShopDropdown({ isOpen, onClose, shopLinkRef }: ShopDropd
             {/* Left Sidebar - Navigation Menu */}
             <div className="w-56 p-6">
               <h2
-                className="text-2xl font-normal italic text-black mb-5"
+                className="text-xl font-light italic text-black mb-5"
                 style={{ fontFamily: "var(--font-sentient)" }}
               >
                 Shop
@@ -257,8 +259,8 @@ export default function ShopDropdown({ isOpen, onClose, shopLinkRef }: ShopDropd
             </div>
 
             {/* Right Content Area - Product Cards */}
-            <div className="flex-1 p-6">
-              <div className="grid grid-cols-2 gap-4 max-w-xl">
+            <div className="flex-1 p-3">
+              <div className="grid grid-cols-2 gap-3 max-w-xl">
                 {products.map((product) => (
                   <ProductCard
                     key={product.id}
