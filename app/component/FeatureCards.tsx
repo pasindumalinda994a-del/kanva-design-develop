@@ -179,21 +179,24 @@ export default function FeatureCards() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl p-6 md:p-8 flex flex-col items-center text-center"
+              className="bg-white rounded-2xl p-6 md:p-8 flex flex-col items-center text-center justify-between"
+              style={{ aspectRatio: "3/2" }}
             >
               <div className="text-black mb-4">{feature.icon}</div>
-              <h3
-                className="text-lg md:text-xl text-black mb-3"
-                style={{ fontFamily: "var(--font-sentient)", fontWeight: 400 }}
-              >
-                {feature.title}
-              </h3>
-              <p
-                className="text-gray-600 text-sm md:text-base leading-relaxed"
-                style={{ fontFamily: "var(--font-figtree)", fontWeight: 400 }}
-              >
-                {feature.description}
-              </p>
+              <div className="flex-1 flex flex-col justify-center">
+                <h3
+                  className="text-lg md:text-xl text-black mb-3"
+                  style={{ fontFamily: "var(--font-sentient)", fontWeight: 400 }}
+                >
+                  {feature.title}
+                </h3>
+                <p
+                  className="text-gray-600 text-sm md:text-base leading-relaxed"
+                  style={{ fontFamily: "var(--font-figtree)", fontWeight: 400 }}
+                >
+                  {feature.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
