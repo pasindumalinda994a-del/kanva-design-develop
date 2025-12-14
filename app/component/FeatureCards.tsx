@@ -7,25 +7,12 @@ export default function FeatureCards() {
         <svg
           width="32"
           height="32"
-          viewBox="0 0 32 32"
-          fill="none"
+          viewBox="0 -960 960 960"
+          fill="#1f1f1f"
           xmlns="http://www.w3.org/2000/svg"
           className="w-8 h-8"
         >
-          <path
-            d="M16 4C12 4 8 6 8 10C8 14 12 18 16 22C20 18 24 14 24 10C24 6 20 4 16 4Z"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M12 14C12 14 13 16 16 16C19 16 20 14 20 14"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M227.62-189.42q-40.9-42.5-64.26-97.74Q140-342.4 140-400.38q0-66.47 23.77-124.08 23.77-57.62 72.08-105.92 36.54-36.7 92-59.47 55.46-22.76 125-34.53 69.54-11.77 150.46-14.12 80.92-2.34 168.77 2.73 6.07 87.62 4.34 169.04-1.73 81.42-13.69 151.32-11.96 69.91-35.31 125.91-23.34 56.01-60.27 92.96-47.77 48.38-103.88 72.46Q507.15-100 445.41-100q-63.49 0-118.87-22.35-55.39-22.34-98.92-67.07Zm82.99 5.19q27.31 18.92 62.62 28.88 35.31 9.96 72.12 9.96 51.53 0 100.43-21.03 48.91-21.04 89.53-62.66 24.62-24.69 43.35-65.3 18.73-40.62 31.07-98.2 12.33-57.57 17.26-132.38 4.93-74.81 1.32-168.27-81.69-2-153.31 1.73-71.61 3.73-130.15 15.15-58.54 11.43-103 29.93t-72 46.65q-42.39 43-63.43 91.77-21.03 48.77-21.03 96.08 0 48.77 20.69 100.5t54.15 84.11q41.08-88.77 105.65-161.38 64.58-72.62 151.04-122.62-81.23 70.39-131.77 149.81-50.54 79.42-74.54 177.27Zm0 0Zm0 0Z"/>
         </svg>
       ),
       title: "Natural Formula",
@@ -36,46 +23,12 @@ export default function FeatureCards() {
         <svg
           width="32"
           height="32"
-          viewBox="0 0 32 32"
-          fill="none"
+          viewBox="0 -960 960 960"
+          fill="#1f1f1f"
           xmlns="http://www.w3.org/2000/svg"
           className="w-8 h-8"
         >
-          <path
-            d="M10 12C10 10.5 11 9 12.5 9C14 9 15 10.5 15 12"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M17 12C17 10.5 18 9 19.5 9C21 9 22 10.5 22 12"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M8 20C8 24 10 26 14 26C18 26 20 24 20 20"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M16 8C16 8 18 10 20 12C22 14 24 18 24 22"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M16 8C16 8 14 10 12 12C10 14 8 18 8 22"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M380.38-100q-66.53 0-113.46-46.35Q220-192.69 220-258.46q0-29.69 13.54-56.08 13.54-26.38 42.54-53.84 18.46-17.31 30.34-31.54 11.89-14.23 24.97-28.54-47.93-73.39-73.31-153.12-25.39-79.73-25.39-156.5 0-51.07 16-77.26 16-26.2 45.93-26.2 34.3 0 74.88 38.12 40.58 38.11 72.65 104.58 13.47 28.46 22.93 59.57 9.46 31.12 14.92 64.81 5.46-33.69 15.12-64.81 9.65-31.11 22.73-59.57 31.69-66.47 72.46-104.58 40.77-38.12 75.07-38.12 29.93 0 45.93 26.2 16 26.19 16 77.26 0 76.77-25.39 156.5-25.38 79.73-73.31 153.12 13.08 14.31 24.97 28.54 11.88 14.23 30.34 31.54 29 27.46 42.54 53.84Q740-288.15 740-258.46q0 65.77-46.92 112.11Q646.15-100 579.62-100q-41.16 0-70.39-11.16L480-122.31l-29.23 11.15Q421.54-100 380.38-100Zm1.54-45.39q17.77 0 40.77-5.69 23-5.69 47.08-16.69-10.23-5-18.65-16.04-8.43-11.04-8.43-19.27 0-8 10.73-13.42t26.58-5.42q15.46 0 26 5.61 10.54 5.62 10.54 13.23 0 8.23-8.42 19.27-8.43 11.04-18.66 16.04 24.08 11 47.08 16.69 23 5.69 40.77 5.69 48.46 0 82.5-33.07 34.04-33.08 34.04-80 0-22.39-12-42.81t-35.77-40.81q-11-9.61-22.2-21.5-11.19-11.88-19.5-22.8-34.3-45.08-57.3-56.66-23-11.57-67.46-11.57-44.47 0-67.47 11.57-23 11.58-57.3 56.66-8.31 10.92-19.5 22.8-11.2 11.89-22.2 21.5-23.76 20.39-35.76 40.81-12 20.42-12 42.81 0 46.92 34.03 80 34.04 33.07 82.5 33.07ZM420-290q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9Zm120 0q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9ZM362.77-463.54q19.08-17.69 38.04-25.84 18.96-8.16 45.5-10.39-4.23-47.54-15.46-94.31-11.23-46.76-30.23-85.92-22.23-47.38-51.08-78.88-28.85-31.5-59.15-41.35-6.47 13.46-9.39 28.92-2.92 15.47-2.92 32.08 0 68.92 22.11 139.89 22.12 70.96 62.58 135.8Zm234.46 0q40.46-64.84 62.58-135.8 22.11-70.97 22.11-139.89 0-16.61-2.92-32.08-2.92-15.46-9.39-28.92-30.3 9.85-59.15 41.35-28.85 31.5-51.08 78.88-19 39.16-30.23 85.92-11.23 46.77-15.46 94.31 26.92 2.23 45.69 10.39 18.77 8.15 37.85 25.84Z"/>
         </svg>
       ),
       title: "Cruelty-Free",
@@ -86,27 +39,12 @@ export default function FeatureCards() {
         <svg
           width="32"
           height="32"
-          viewBox="0 0 32 32"
-          fill="none"
+          viewBox="0 -960 960 960"
+          fill="#1f1f1f"
           xmlns="http://www.w3.org/2000/svg"
           className="w-8 h-8"
         >
-          <circle
-            cx="16"
-            cy="16"
-            r="12"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M12 16L15 19L20 14"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="m354.08-85.39-71.39-121.92L142.08-236l15.08-138.92L66.93-480l90.23-104.46L142.08-723l140.61-29.08 71.39-122.53 125.92 57 125.92-57 72.39 122.53 140 29.08-15.47 138.54L893.07-480l-90.23 105.08L818.31-236l-140 28.69-72.39 121.92-125.92-57-125.92 57Zm20.46-59.76L480-189l107.69 43.85L652.38-244l115.08-28.46-11.23-117.85L835.31-480l-79.08-90.92 11.23-118.23L652.38-716l-65.92-98.85L480-771l-107.69-43.85L307.62-716l-115.08 26.85 11.23 118.23L124.69-480l79.08 89.69-11.23 119.08L307.62-244l66.92 98.85ZM480-480Zm-42.62 121.46 212.77-211.15-34.23-31-178.54 177.31-92.69-95.93-34.84 34.23 127.53 126.54Z"/>
         </svg>
       ),
       title: "Expert Approved",
@@ -117,54 +55,12 @@ export default function FeatureCards() {
         <svg
           width="32"
           height="32"
-          viewBox="0 0 32 32"
-          fill="none"
+          viewBox="0 -960 960 960"
+          fill="#1f1f1f"
           xmlns="http://www.w3.org/2000/svg"
           className="w-8 h-8"
         >
-          <rect
-            x="4"
-            y="12"
-            width="20"
-            height="12"
-            rx="2"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M8 12V8C8 6.5 9 5 10.5 5H13.5C15 5 16 6.5 16 8V12"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle
-            cx="10"
-            cy="22"
-            r="2"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle
-            cx="18"
-            cy="22"
-            r="2"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M24 18L28 22L24 26"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M222.1-178.31q-45.95 0-78.33-32.4-32.38-32.39-32.38-78.68H53.85v-432.92q0-23.53 17.08-40.61T111.54-780h558.61v157.39h95l141 188.3v144.92h-65.61q0 46.29-32.39 78.68-32.39 32.4-78.66 32.4-46.11 0-78.42-32.4-32.3-32.39-32.3-78.68H333.15q0 46.31-32.55 78.7-32.55 32.38-78.5 32.38Zm.17-45.38q27.27 0 46.38-19.12 19.12-19.11 19.12-46.38 0-27.27-19.12-46.39-19.11-19.11-46.38-19.11-27.27 0-46.39 19.11-19.11 19.12-19.11 46.39t19.11 46.38q19.12 19.12 46.39 19.12ZM99.23-334.77h21.62q12.76-28.54 39.96-47.23 27.19-18.69 60.75-18.69 32.78 0 60.57 18.81 27.79 18.8 40.56 47.11h302.08v-399.84H111.54q-4.62 0-8.46 3.84-3.85 3.85-3.85 8.46v387.54Zm630.42 111.08q27.27 0 46.39-19.12 19.11-19.11 19.11-46.38 0-27.27-19.11-46.39-19.12-19.11-46.39-19.11t-46.38 19.11q-19.12 19.12-19.12 46.39t19.12 46.38q19.11 19.12 46.38 19.12Zm-59.5-195.54h191l-119.46-158h-71.54v158ZM362.31-527.08Z"/>
         </svg>
       ),
       title: "Free Shipping",
@@ -173,30 +69,30 @@ export default function FeatureCards() {
   ];
 
   return (
-    <section className="w-full bg-[#F2F2EF] py-16 px-6 md:px-12 lg:px-20">
-      <div className="max-w-8xl mx-48">
+    <section className="w-full bg-[#F2F2EF] py-24 px-8 md:px-16 lg:px-64">
+      <div className="max-w-8xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl p-6 md:p-8 flex flex-col items-center text-center justify-between"
+              className="bg-white rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 flex flex-col items-center justify-center text-center overflow-hidden"
               style={{ aspectRatio: "3/2" }}
             >
-              <div className="text-black mb-4">{feature.icon}</div>
-              <div className="flex-1 flex flex-col justify-center">
-                <h3
-                  className="text-lg md:text-xl text-black mb-3"
-                  style={{ fontFamily: "var(--font-sentient)", fontWeight: 400 }}
-                >
-                  {feature.title}
-                </h3>
-                <p
-                  className="text-gray-600 text-sm md:text-base leading-relaxed"
-                  style={{ fontFamily: "var(--font-figtree)", fontWeight: 400 }}
-                >
-                  {feature.description}
-                </p>
+              <div className="text-black mb-3 sm:mb-4 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex-shrink-0">
+                {feature.icon}
               </div>
+              <h3
+                className="text-base sm:text-lg md:text-xl text-black mb-2 sm:mb-3 px-2"
+                style={{ fontFamily: "var(--font-sentient)", fontWeight: 400 }}
+              >
+                {feature.title}
+              </h3>
+              <p
+                className="text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed px-2"
+                style={{ fontFamily: "var(--font-figtree)", fontWeight: 400 }}
+              >
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>

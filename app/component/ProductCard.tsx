@@ -111,7 +111,7 @@ export default function ProductCard({
 
       {/* Discount Badge */}
       {product.discount && (
-        <div className="absolute top-2 right-2 bg-[#1A5F3F] text-white px-2 py-1 rounded-md text-xs font-semibold z-10 shadow-sm">
+        <div className="absolute top-2 right-2 bg-[#3C4433] text-white px-2 py-1 rounded-md text-xs font-semibold z-10 shadow-sm">
           {product.discount}
         </div>
       )}
@@ -173,7 +173,7 @@ export default function ProductCard({
       {/* Text Section - 1/4 of card */}
       <div className="h-1/4 flex flex-col items-center justify-center px-6 py-4">
         <h3
-          className="text-black font-light text-center mb-2 text-base"
+          className="text-black font-light text-center mb-2 text-lg"
           style={{ fontFamily: "var(--font-sentient)" }}
         >
           {product.name}

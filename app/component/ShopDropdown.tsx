@@ -168,12 +168,18 @@ export default function ShopDropdown({ isOpen, onClose, shopLinkRef }: ShopDropd
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+  const isMounted = useRef(false);
 
-  // Set initial state on mount
+  // Set initial state on mount and mark as mounted
   useEffect(() => {
     if (overlayRef.current && contentRef.current) {
       gsap.set(overlayRef.current, { opacity: 0 });
       gsap.set(contentRef.current, { opacity: 0, y: -10 });
+      // Mark as mounted after a small delay to ensure initial state is set
+      setTimeout(() => {
+        isMounted.current = true;
+      }, 0);
     }
   }, []);
 
@@ -188,6 +194,22 @@ export default function ShopDropdown({ isOpen, onClose, shopLinkRef }: ShopDropd
   // Animate on isOpen change
   useEffect(() => {
     if (!overlayRef.current || !contentRef.current) return;
+
+    // Skip animation on first render - always skip the first render to prevent flash
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      // Ensure initial state is set correctly
+      if (!isOpen) {
+        gsap.set(overlayRef.current, { opacity: 0 });
+        gsap.set(contentRef.current, { opacity: 0, y: -10 });
+      }
+      return;
+    }
+
+    // Don't animate until component is fully mounted
+    if (!isMounted.current) {
+      return;
+    }
 
     if (isOpen) {
       // Animate in - smooth opacity 0 -> 1
@@ -226,12 +248,19 @@ export default function ShopDropdown({ isOpen, onClose, shopLinkRef }: ShopDropd
       <div
         ref={overlayRef}
         className="fixed inset-0 bg-black/20 z-40"
-        style={{ pointerEvents: isOpen ? "auto" : "none" }}
+        style={{ 
+          pointerEvents: isOpen ? "auto" : "none",
+          visibility: isOpen ? "visible" : "hidden"
+        }}
         onClick={onClose}
       />
 
       {/* Dropdown container - positioned below navbar with small gap */}
-      <div ref={containerRef} className="fixed top-32 z-50 w-full max-w-3xl px-2">
+      <div 
+        ref={containerRef} 
+        className="fixed top-32 z-50 w-full max-w-3xl px-2"
+        style={{ visibility: isOpen ? "visible" : "hidden" }}
+      >
         <div
           ref={contentRef}
           className="bg-white rounded-2xl shadow-2xl overflow-hidden"

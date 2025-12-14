@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+import ArrowAnimation from "./ArrowAnimation";
 
 export interface CollectionCard {
   id: number;
@@ -20,15 +21,16 @@ export default function CollectionCardItem({ collection, onClick }: CollectionCa
   const cardRef = useRef<HTMLAnchorElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const arrowRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const card = cardRef.current;
     const image = imageRef.current;
     const text = textRef.current;
-    const arrow = arrowRef.current;
 
-    if (!card || !image || !text || !arrow) return;
+    if (!card || !image || !text) return;
+
+    // Find the img element inside the Image component
+    const imgElement = image.querySelector("img");
 
     let hoverTimeline: gsap.core.Timeline | null = null;
 
@@ -37,23 +39,25 @@ export default function CollectionCardItem({ collection, onClick }: CollectionCa
 
       hoverTimeline = gsap.timeline();
 
-      // Scale up image slightly
+      // Scale up image container slightly
       hoverTimeline.to(image, {
         scale: 1.05,
         duration: 0.3,
         ease: "power2.out",
       });
 
-      // Move arrow to the right
-      hoverTimeline.to(
-        arrow,
-        {
-          x: 5,
-          duration: 0.3,
-          ease: "power2.out",
-        },
-        "<"
-      );
+      // Add blur effect only to the image element
+      if (imgElement) {
+        hoverTimeline.to(
+          imgElement,
+          {
+            filter: "blur(4px)",
+            duration: 0.3,
+            ease: "power2.out",
+          },
+          "<"
+        );
+      }
     };
 
     const handleMouseLeave = () => {
@@ -61,23 +65,25 @@ export default function CollectionCardItem({ collection, onClick }: CollectionCa
 
       hoverTimeline = gsap.timeline();
 
-      // Scale down image
+      // Scale down image container
       hoverTimeline.to(image, {
         scale: 1,
         duration: 0.3,
         ease: "power2.out",
       });
 
-      // Move arrow back
-      hoverTimeline.to(
-        arrow,
-        {
-          x: 0,
-          duration: 0.3,
-          ease: "power2.out",
-        },
-        "<"
-      );
+      // Remove blur effect from the image element
+      if (imgElement) {
+        hoverTimeline.to(
+          imgElement,
+          {
+            filter: "blur(0px)",
+            duration: 0.3,
+            ease: "power2.out",
+          },
+          "<"
+        );
+      }
     };
 
     card.addEventListener("mouseenter", handleMouseEnter);
@@ -124,13 +130,7 @@ export default function CollectionCardItem({ collection, onClick }: CollectionCa
         >
           {collection.name}
         </span>
-        <span
-          ref={arrowRef}
-          className="inline-block text-black text-base"
-          style={{ fontFamily: "var(--font-sentient)" }}
-        >
-          →
-        </span>
+        <ArrowAnimation />
       </div>
     </a>
   );

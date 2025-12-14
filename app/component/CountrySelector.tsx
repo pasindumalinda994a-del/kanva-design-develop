@@ -1,41 +1,36 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import Image from "next/image";
 import gsap from "gsap";
-import CollectionCardItem, { CollectionCard } from "./CollectionCard";
 
-interface CollectionDropdownProps {
-  isOpen: boolean;
-  onClose: () => void;
-  collectionsLinkRef?: React.RefObject<HTMLDivElement | null>;
+export interface Country {
+  code: string;
+  name: string;
+  flag: string;
 }
 
-const collections: CollectionCard[] = [
-  {
-    id: 1,
-    name: "Cleansers",
-    image: "/images/clensers.webp",
-    href: "#",
-  },
-  {
-    id: 2,
-    name: "Lotions",
-    image: "/images/lotions.webp",
-    href: "#",
-  },
-  {
-    id: 3,
-    name: "Moisturizers",
-    image: "/images/moisturizers.webp",
-    href: "#",
-  },
+const countries: Country[] = [
+  { code: "usa", name: "United States (USD)", flag: "/images/usa.svg" },
+  { code: "ger", name: "Germany (EUR)", flag: "/images/Ger.svg" },
+  { code: "fr", name: "Czechia (CZK)", flag: "/images/fr.svg" },
 ];
 
-export default function CollectionDropdown({
+interface CountrySelectorProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSelectCountry: (country: Country) => void;
+  selectedCountry: Country;
+  countryButtonRef?: React.RefObject<HTMLButtonElement | null>;
+}
+
+export default function CountrySelector({
   isOpen,
   onClose,
-  collectionsLinkRef,
-}: CollectionDropdownProps) {
+  onSelectCountry,
+  selectedCountry,
+  countryButtonRef,
+}: CountrySelectorProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,13 +49,13 @@ export default function CollectionDropdown({
     }
   }, []);
 
-  // Update position based on Collections link position
+  // Update position based on country button position
   useEffect(() => {
-    if (!containerRef.current || !collectionsLinkRef?.current) return;
+    if (!containerRef.current || !countryButtonRef?.current) return;
 
-    const collectionsLinkRect = collectionsLinkRef.current.getBoundingClientRect();
-    containerRef.current.style.left = `${collectionsLinkRect.left}px`;
-  }, [isOpen, collectionsLinkRef]);
+    const buttonRect = countryButtonRef.current.getBoundingClientRect();
+    containerRef.current.style.left = `${buttonRect.left}px`;
+  }, [isOpen, countryButtonRef]);
 
   // Animate on isOpen change
   useEffect(() => {
@@ -113,38 +108,55 @@ export default function CollectionDropdown({
     }
   }, [isOpen]);
 
+  const handleCountrySelect = (country: Country) => {
+    onSelectCountry(country);
+    onClose();
+  };
+
   return (
     <>
       {/* Backdrop overlay */}
       <div
         ref={overlayRef}
         className="fixed inset-0 bg-black/20 z-40"
-        style={{ 
+        style={{
           pointerEvents: isOpen ? "auto" : "none",
-          visibility: isOpen ? "visible" : "hidden"
+          visibility: isOpen ? "visible" : "hidden",
         }}
         onClick={onClose}
       />
 
       {/* Dropdown container - positioned below navbar with small gap */}
-      <div 
-        ref={containerRef} 
-        className="fixed top-32 z-50 w-full max-w-3xl px-2"
+      <div
+        ref={containerRef}
+        className="fixed top-32 z-50"
         style={{ visibility: isOpen ? "visible" : "hidden" }}
       >
         <div
           ref={contentRef}
-          className="bg-white rounded-2xl shadow-2xl overflow-hidden p-3"
+          className="bg-white rounded-2xl shadow-2xl overflow-hidden min-w-[250px]"
         >
-          {/* Three Collection Cards in a row */}
-          <div className="grid grid-cols-3 gap-3">
-            {collections.map((collection) => (
-              <CollectionCardItem
-                key={collection.id}
-                collection={collection}
-                onClick={onClose}
-              />
-            ))}
+          <div className="p-2">
+            {countries
+              .filter((country) => country.code !== selectedCountry.code)
+              .map((country) => (
+                <button
+                  key={country.code}
+                  onClick={() => handleCountrySelect(country)}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors hover:bg-gray-50"
+                >
+                  <Image
+                    src={country.flag}
+                    alt={country.name}
+                    width={24}
+                    height={18}
+                    className="w-6 h-auto"
+                  />
+                  <span className="text-sm text-gray-800 font-normal">
+                    {country.name}
+                  </span>
+                </button>
+              ))}
           </div>
         </div>
       </div>

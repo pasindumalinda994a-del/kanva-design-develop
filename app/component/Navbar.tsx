@@ -6,14 +6,19 @@ import gsap from "gsap";
 import AnimatedNavLink from "./AnimatedNavLink";
 import ShopDropdown from "./ShopDropdown";
 import CollectionDropdown from "./CollectionDropdown";
+import CountrySelector, { Country } from "./CountrySelector";
 
 export default function Navbar() {
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isCollectionsDropdownOpen, setIsCollectionsDropdownOpen] = useState(false);
   const [isShopClicked, setIsShopClicked] = useState(false);
   const [isCollectionsClicked, setIsCollectionsClicked] = useState(false);
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const [isCountryClicked, setIsCountryClicked] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<Country>({ code: "usa", name: "United States", flag: "/images/usa.svg" });
   const shopLinkRef = useRef<HTMLDivElement>(null);
   const collectionsLinkRef = useRef<HTMLDivElement>(null);
+  const countryButtonRef = useRef<HTMLButtonElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
   const scrollTween = useRef<gsap.core.Tween | null>(null);
@@ -102,12 +107,61 @@ export default function Navbar() {
     }
   };
 
+  // Country dropdown hover handlers (only work when not clicked)
+  const handleCountryMouseEnter = () => {
+    if (!isCountryClicked) {
+      setIsCountryDropdownOpen(true);
+    }
+  };
+
+  const handleCountryMouseLeave = () => {
+    if (!isCountryClicked) {
+      setIsCountryDropdownOpen(false);
+    }
+  };
+
+  const handleCountryDropdownMouseEnter = () => {
+    if (!isCountryClicked) {
+      setIsCountryDropdownOpen(true);
+    }
+  };
+
+  const handleCountryDropdownMouseLeave = () => {
+    if (!isCountryClicked) {
+      setIsCountryDropdownOpen(false);
+    }
+  };
+
+  // Country click handler
+  const handleCountryClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isCountryClicked) {
+      setIsCountryClicked(false);
+      setIsCountryDropdownOpen(false);
+    } else {
+      // Close shop and collections if open
+      setIsShopClicked(false);
+      setIsShopDropdownOpen(false);
+      setIsCollectionsClicked(false);
+      setIsCollectionsDropdownOpen(false);
+      // Open country dropdown
+      setIsCountryClicked(true);
+      setIsCountryDropdownOpen(true);
+    }
+  };
+
+  const handleCountrySelect = (country: Country) => {
+    setSelectedCountry(country);
+  };
+
   // Close dropdowns when clicking anywhere (backdrop)
   const handleBackdropClick = () => {
     setIsShopClicked(false);
     setIsShopDropdownOpen(false);
     setIsCollectionsClicked(false);
     setIsCollectionsDropdownOpen(false);
+    setIsCountryClicked(false);
+    setIsCountryDropdownOpen(false);
   };
 
   useEffect(() => {
@@ -347,10 +401,16 @@ export default function Navbar() {
           {/* Right Icons */}
           <div className="flex items-center gap-6">
             {/* Language Selector */}
-            <button className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity">
+            <button
+              ref={countryButtonRef}
+              onMouseEnter={handleCountryMouseEnter}
+              onMouseLeave={handleCountryMouseLeave}
+              onClick={handleCountryClick}
+              className="w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity"
+            >
               <Image
-                src="/images/usa.svg"
-                alt="Language"
+                src={selectedCountry.flag}
+                alt={selectedCountry.name}
                 width={20}
                 height={15}
                 className="w-5 h-auto"
@@ -424,7 +484,7 @@ export default function Navbar() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.25 10.5V6a2.25 2.25 0 1 1 4.5 0v4.5m-4.5 0h9"
+                  d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5M3 10.5h18l-1.5 9H4.5L3 10.5z"
                 />
               </svg>
             </button>
@@ -452,6 +512,19 @@ export default function Navbar() {
         isOpen={isCollectionsDropdownOpen} 
         onClose={handleBackdropClick} 
         collectionsLinkRef={collectionsLinkRef} 
+      />
+    </div>
+    <div 
+      onMouseEnter={handleCountryDropdownMouseEnter} 
+      onMouseLeave={handleCountryDropdownMouseLeave}
+      style={{ pointerEvents: isCountryDropdownOpen ? "auto" : "none" }}
+    >
+      <CountrySelector 
+        isOpen={isCountryDropdownOpen} 
+        onClose={handleBackdropClick}
+        onSelectCountry={handleCountrySelect}
+        selectedCountry={selectedCountry}
+        countryButtonRef={countryButtonRef}
       />
     </div>
     </>
